@@ -1,0 +1,84 @@
+#!/usr/bin/env ruby
+#
+# Copyright 2011, James Turnbull
+# 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#     http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+$:.unshift(File.expand_path(File.join(File.dirname(__FILE__), "..", "lib")))
+
+require 'rubygems'
+require 'optparse'
+require 'ghostred'
+require 'ghostred/version'
+
+options = {}
+
+optparse = OptionParser.new do |opts|
+  # Set a banner, displayed at the top
+  # of the help screen.
+  opts.banner = 'Usage: ghostred [options] ...'
+
+  opts.separator ''
+  opts.separator 'Configuration options:'
+
+  options[:rm_token] = ENV['RM_TOKEN']
+  opts.on( '-r', '--rm_token TOKEN', 'The API token to use with Redmine') do |rm_token|
+    options[:rm_token] = rm_token
+  end
+
+ options[:rm_site] = ENV['RM_SITE']
+ opts.on( '-s', '--rm_site SITE', 'The Redmine site to connect to') do |rm_site|
+   options[:rm_site] = rm_site
+ end
+
+  options[:gh_org] = ENV['GH_ORG']
+  opts.on( '-g', '--gh_org GITHUB_ORG', 'The GitHub organisation') do |gh_org|
+    options[:gh_org] = gh_org
+  end
+
+  options[:gh_token] = ENV['GH_TOKEN']
+  opts.on( '-t', '--gh_token TOKEN', 'The GitHub token') do |gh_token|
+    options[:gh_token] = gh_token
+  end
+
+  opts.separator ""
+  opts.separator "Common options:"
+
+  opts.on_tail('-v', '--version', 'Display version' ) do
+    puts Ghostred::VERSION
+    exit
+  end
+
+  opts.on_tail('-h', '--help', 'Display this screen' ) do
+    puts opts
+    exit
+  end
+end
+
+begin
+  optparse.parse!
+  mandatory = [:rm_token, :rm_site, :gh_org, :gh_token]
+  missing = mandatory.select{ |param| options[param].nil? }
+  if not missing.empty?
+    puts "Missing options: #{missing.join(', ')}" 
+    puts optparse
+    exit
+  end
+  # Set configuration options
+  Ghostred.run(options[:rm_token], options[:rm_site], options[:gh_org], options[:gh_token])
+rescue OptionParser::InvalidArgument, OptionParser::InvalidOption, OptionParser::MissingArgument
+  puts $!.to_s
+  puts optparse
+  exit
+end
