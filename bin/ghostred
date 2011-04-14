@@ -56,7 +56,7 @@ optparse = OptionParser.new do |opts|
   opts.separator "Common options:"
 
   opts.on_tail('-v', '--version', 'Display version' ) do
-    puts Ghostred::VERSION
+    puts Ghostred::Version::VERSION
     exit
   end
 
@@ -76,7 +76,7 @@ begin
     exit
   end
   # Set configuration options
-  Ghostred.run(options[:rm_token], options[:rm_site], options[:gh_org], options[:gh_token])
+  GhostRed::Base.run(options[:rm_token], options[:rm_site], options[:gh_org], options[:gh_token])
 rescue OptionParser::InvalidArgument, OptionParser::InvalidOption, OptionParser::MissingArgument
   puts $!.to_s
   puts optparse
