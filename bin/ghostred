@@ -47,6 +47,12 @@ optparse = OptionParser.new do |opts|
     options[:gh_org] = gh_org
   end
 
+  options[:gh_user] = ENV['GH_USER']
+    opts.on( '-u', '--gh_user GITHUB_USER', 'The GitHub user') do |gh_user|
+      options[:gh_user] = gh_user
+    end
+  end
+
   options[:gh_token] = ENV['GH_TOKEN']
   opts.on( '-t', '--gh_token TOKEN', 'The GitHub token') do |gh_token|
     options[:gh_token] = gh_token
@@ -68,7 +74,7 @@ end
 
 begin
   optparse.parse!
-  mandatory = [:rm_token, :rm_site, :gh_org, :gh_token]
+  mandatory = [:rm_token, :rm_site, :gh_org, :gh_user, :gh_token]
   missing = mandatory.select{ |param| options[param].nil? }
   if not missing.empty?
     puts "Missing options: #{missing.join(', ')}" 
@@ -76,7 +82,7 @@ begin
     exit
   end
   # Set configuration options
-  GhostRed::Base.run(options[:rm_token], options[:rm_site], options[:gh_org], options[:gh_token])
+  GhostRed::Base.run(options[:rm_token], options[:rm_site], options[:gh_org], options[:gh_user], options[:gh_token])
 rescue OptionParser::InvalidArgument, OptionParser::InvalidOption, OptionParser::MissingArgument
   puts $!.to_s
   puts optparse

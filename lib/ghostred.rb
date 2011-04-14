@@ -12,23 +12,14 @@ module GhostRed
     "puppet-vcsrepo" => "modules"
   }
 
-  def self.run(rm_token,rm_site,gh_org,gh_token)
+  def self.run(rm_token,rm_site,gh_org,gh_user,gh_token)
     @gh_org = gh_org
+    @gh_user = gh_user
     @gh_token = gh_token
-    configure_gh
     configure_rm(rm_token,rm_site)
     repo_list = get_org_repos
     @project_list = get_redmine_projects
     get_pull_requests(repo_list)
-  end
-
-  def self.configure_gh
-    Octokit.configure do |config|
-      config.login = @gh_org
-      config.token = @gh_token
-      config.endpoint = 'https://github.com'
-    end
-    puts "Connected to GitHub..."
   end
 
   def self.configure_rm(rm_token,rm_site)
@@ -104,12 +95,12 @@ module GhostRed
   end
 
   def self.close_pull_request(number,repo,url)
+    @gh_client = Octokit::Client.new(:login => @gh_user, :token => @gh_token)
     puts "Adding comment to GitHub pull request at #{repo}:#{number}"
-    comment = "Request closed please track this issue at #{url}"
-    #Octokit.add_comment({:username => @gh_org, :repository => repo}, number, 'comment')
-    Octokit.add_comment("puppetlabs/puppet-acceptance", 4, 'This is test comment')
+    comment = "Request closed! Please track this issue at #{url}"
+    Octokit.add_comment({:username => @gh_org, :repository => repo}, number, 'comment')
     puts "Closing GitHub issue #{repo}:#{number}"
-    Octokit.close_issue({:username => @gh_org, :repository => repo}, number)
+    #@gh_client.close_issue("#{@gh_org}/#{repo}", number)
   end
 
  end
