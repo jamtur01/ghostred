@@ -98,7 +98,7 @@ module GhostRed
     @gh_client = Octokit::Client.new(:login => @gh_user, :token => @gh_token)
     puts "Adding comment to GitHub pull request at #{repo}:#{number}"
     comment = "Request closed! Please track this issue at #{url}"
-    Octokit.add_comment({:username => @gh_org, :repository => repo}, number, 'comment')
+    @gh_client.add_comment({:username => @gh_org, :repo => repo}, number, 'comment')
     puts "Closing GitHub issue #{repo}:#{number}"
     #@gh_client.close_issue("#{@gh_org}/#{repo}", number)
   end

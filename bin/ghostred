@@ -48,9 +48,8 @@ optparse = OptionParser.new do |opts|
   end
 
   options[:gh_user] = ENV['GH_USER']
-    opts.on( '-u', '--gh_user GITHUB_USER', 'The GitHub user') do |gh_user|
-      options[:gh_user] = gh_user
-    end
+  opts.on( '-u', '--gh_user GITHUB_USER', 'The GitHub user') do |gh_user|
+    options[:gh_user] = gh_user
   end
 
   options[:gh_token] = ENV['GH_TOKEN']
