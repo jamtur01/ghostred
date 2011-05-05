@@ -95,7 +95,7 @@ module GhostRed
   def self.close_pull_request(number,repo,url)
     @gh_client = Octokit::Client.new(:login => @gh_user, :token => @gh_token)
     puts "Adding comment to GitHub pull request at #{repo}:#{number}"
-    comment = "Request closed! Please track this issue at #{url}"
+    comment = "Thanks for your request! It's been moved to our Redmine ticket tracker and you can now track this issue at #{url}"
     @gh_client.add_comment({:username => @gh_org, :repo => repo}, number, comment)
     puts "Closing GitHub issue #{repo}:#{number}"
     @gh_client.close_issue("#{@gh_org}/#{repo}", number)
