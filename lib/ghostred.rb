@@ -32,7 +32,7 @@ module GhostRed
 
   def self.get_org_repos
     repo_list = []
-    repos = Octokit.organization_repositories(@gh_org)
+    repos = Octokit.repositories(@gh_org)
     repos.each do |r|
       repo_list << r.name
     end

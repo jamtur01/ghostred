@@ -73,7 +73,7 @@ end
 
 begin
   optparse.parse!
-  mandatory = [:rm_token, :rm_site, :gh_org, :gh_user, :gh_token]
+  mandatory = [:rm_token, :rm_site, :gh_user, :gh_token]
   missing = mandatory.select{ |param| options[param].nil? }
   if not missing.empty?
     puts "Missing options: #{missing.join(', ')}" 
@@ -81,6 +81,7 @@ begin
     exit
   end
   # Set configuration options
+  options[:gh_org] = options[:gh_user] if options[:gh_org] == nil
   GhostRed::Base.run(options[:rm_token], options[:rm_site], options[:gh_org], options[:gh_user], options[:gh_token])
 rescue OptionParser::InvalidArgument, OptionParser::InvalidOption, OptionParser::MissingArgument
   puts $!.to_s
