@@ -1,15 +1,15 @@
 require 'octokit'
 require 'redmine_client'
 require 'json'
-require 'pp'
 
 module GhostRed
  class Base
 
   PROJECT_MAP = { 
     "marionette-collective" => "mcollective",
-    "puppet-acceptance" => "testing-matrix",
-    "puppet-vcsrepo" => "modules"
+    "puppet-acceptance"     => "testing-matrix",
+    "puppet-vcsrepo"        => "modules",
+    "puppet-dashboard"      => "dashboard"
   }
 
   def self.run(rm_token,rm_site,gh_org,gh_user,gh_token)
@@ -75,7 +75,7 @@ module GhostRed
       puts "#{repo} needs a PROJECT_MAP entry"
       return
     end
-    id = @project_list.index(identifier)
+    id = @project_list.key(identifier)
     issue = RedmineClient::Issue.new(
          :subject => title,
          :project_id => id,
@@ -84,23 +84,21 @@ module GhostRed
          :assigned_to_id => '380',
          :custom_field_values => { '13' => branch }
     )
-    #if issue.save
-      issue.id = 10
+    if issue.save
       url = "https://projects.puppetlabs.com/issues/#{issue.id}"
       close_pull_request(number,repo,url)
-      exit
-    #else
-    #  puts issue.errors.full_messages
-    #end
+    else
+      puts issue.errors.full_messages
+    end
   end
 
   def self.close_pull_request(number,repo,url)
     @gh_client = Octokit::Client.new(:login => @gh_user, :token => @gh_token)
     puts "Adding comment to GitHub pull request at #{repo}:#{number}"
     comment = "Request closed! Please track this issue at #{url}"
-    @gh_client.add_comment({:username => @gh_org, :repo => repo}, number, 'comment')
+    @gh_client.add_comment({:username => @gh_org, :repo => repo}, number, comment)
     puts "Closing GitHub issue #{repo}:#{number}"
-    #@gh_client.close_issue("#{@gh_org}/#{repo}", number)
+    @gh_client.close_issue("#{@gh_org}/#{repo}", number)
   end
 
  end
