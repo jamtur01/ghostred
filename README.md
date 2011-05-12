@@ -1,7 +1,23 @@
 GhostRed
 ========
 
-Automatically create Redmine tickets from GitHub pull requests.
+GhostRed is designed to parse and migrate GitHub Pull Requests·
+to a Redmine ticket tracker using the respective APIs.
+
+GhostRed connects to GitHub using your GitHub username and API token.·
+It then scans the repositories owned by the GitHub username (or you can·
+specify another user or organisation using the --gh_org option). Each·
+pull request is then captured, a corresponding ticket opened in a·
+Redmine project (specified by either matching the name of a repository·
+to the GitHub repository name or checking the PROJECT_MAP in the·
+lib/ghostred.rb file).  You can update this map yourself to specify·
+the relationship between a GitHub repository and it's Redmine project.
+
+Authentication to Redmine is specified using the --rm_token flag and
+the Redmine tracker to connect to using the --rm_site flag.
+
+The GitHub pull request is finally closed with a comment linking to the·
+newly created Redmine ticket.
 
 Author
 ------
@@ -26,24 +42,6 @@ GhostRed is available as a RubyGem.
 Usage
 -----
 
-GhostRed is designed to parse and migrate GitHub Pull Requests 
-to a Redmine ticket tracker using the respective APIs.
-
-GhostRed connects to GitHub using your GitHub username and API token. 
-It then scans the repositories owned by the GitHub username (or you can 
-specify another user or organisation using the --gh_org option). Each 
-pull request is then captured, a corresponding ticket opened in a 
-Redmine project (specified by either matching the name of a repository 
-to the GitHub repository name or checking the PROJECT_MAP in the 
-lib/ghostred.rb file).  You can update this map yourself to specify 
-the relationship between a GitHub repository and it's Redmine project.
-
-Authentication to Redmine is specified using the --rm_token flag and the 
-Redmine tracker to connect to using the --rm_site flag.
-
-The GitHub pull request is finally closed with a comment linking to the 
-newly created Redmine ticket.
-
 Usage: ghostred [options] ...
 
 Configuration options:
@@ -66,5 +64,4 @@ License
 -------
 
 See LICENSE file.
-
 

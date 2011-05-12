@@ -1,6 +1,5 @@
 require 'octokit'
 require 'redmine_client'
-require 'json'
 
 module GhostRed
  class Base
