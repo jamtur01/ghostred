@@ -28,9 +28,8 @@ Prerequistes
 ------------
 
 * Octokit - octokit
-* Redmine Client - redmine_client
 
-    $ sudo gem install octokit redmine_client
+    $ sudo gem install octokit
 
 Installation
 ------------
