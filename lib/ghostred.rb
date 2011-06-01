@@ -15,15 +15,15 @@ module GhostRed
     @gh_org = gh_org
     @gh_user = gh_user
     @gh_token = gh_token
-    configure_rm(rm_token,rm_site)
+    configure_rm(rm_token,@rm_site)
     repo_list = get_org_repos
     @project_list = get_redmine_projects
     get_pull_requests(repo_list)
   end
 
-  def self.configure_rm(rm_token,rm_site)
+  def self.configure_rm(rm_token,@rm_site)
     RedmineClient::Base.configure do
-      self.site = rm_site
+      self.site = @rm_site
       self.user = rm_token
     end
     puts "Connected to Redmine..."
@@ -84,7 +84,7 @@ module GhostRed
          :custom_field_values => { '13' => branch }
     )
     if issue.save
-      url = "https://projects.puppetlabs.com/issues/#{issue.id}"
+      url = "#{@rm_site}/issues/#{issue.id}"
       close_pull_request(number,repo,url)
     else
       puts issue.errors.full_messages
