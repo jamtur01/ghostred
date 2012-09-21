@@ -41,6 +41,7 @@ GhostRed is available as a RubyGem.
 Usage
 -----
 
+```
 Usage: ghostred [options] ...
 
 Configuration options:
@@ -53,6 +54,7 @@ Configuration options:
 Common options:
     -v, --version                    Display version
     -h, --help                       Display this screen
+```
 
 You can run GhostRed by specfying a number of command line options.
 
